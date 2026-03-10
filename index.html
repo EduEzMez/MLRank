@@ -6,10 +6,7 @@
 <title>GadgetRank — Top 10 del día</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:#0a0a0f; --surface:#12121a; --card:#1a1a26; --border:#2a2a3d;
-  --accent:#ffe44d; --accent2:#ff6b35; --text:#f0f0ff; --muted:#6b6b8a; --green:#4fffb0;
-}
+:root{--bg:#0a0a0f;--surface:#12121a;--card:#1a1a26;--border:#2a2a3d;--accent:#ffe44d;--accent2:#ff6b35;--text:#f0f0ff;--muted:#6b6b8a;--green:#4fffb0;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh;overflow-x:hidden;}
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
@@ -32,54 +29,53 @@ header{padding:1.8rem 2rem 1rem;display:flex;align-items:flex-end;justify-conten
 #result-count{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--accent);}
 #loader{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6rem 0;gap:1.5rem;}
 .loader-bar{width:260px;height:2px;background:var(--border);border-radius:2px;overflow:hidden;}
-.loader-fill{height:100%;background:var(--accent);width:0%;animation:loadfill 2.5s ease-in-out infinite;border-radius:2px;}
-@keyframes loadfill{0%{width:0%}60%{width:80%}100%{width:100%}}
-#loader p,#loader-msg{font-family:'Space Mono',monospace;font-size:.75rem;color:var(--muted);letter-spacing:.1em;}
-#error-msg{display:none;text-align:center;padding:4rem;color:var(--muted);font-family:'Space Mono',monospace;font-size:.8rem;line-height:1.8;}
+.loader-fill{height:100%;background:var(--accent);animation:loadfill 2s ease-in-out infinite;border-radius:2px;}
+@keyframes loadfill{0%{width:0%;margin-left:0}50%{width:80%}100%{width:0%;margin-left:100%}}
+#loader-msg{font-family:'Space Mono',monospace;font-size:.75rem;color:var(--muted);letter-spacing:.1em;}
+#error-msg{display:none;text-align:center;padding:4rem;color:var(--muted);font-family:'Space Mono',monospace;font-size:.8rem;line-height:2;}
+#error-msg pre{background:var(--surface);border:1px solid var(--border);padding:.8rem 1rem;border-radius:3px;font-size:.65rem;margin:.8rem 0;text-align:left;overflow-x:auto;}
 #error-msg button{margin-top:1rem;font-family:'Space Mono',monospace;font-size:.75rem;padding:.6rem 1.5rem;background:var(--accent);color:var(--bg);border:none;cursor:pointer;border-radius:2px;font-weight:700;}
 #grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);}
 .card{background:var(--card);padding:1.4rem;display:flex;flex-direction:column;gap:.9rem;transition:background .2s;position:relative;overflow:hidden;}
 .card:hover{background:#20202f;}
-.card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .3s ease;}
+.card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .3s;}
 .card:hover::after{transform:scaleX(1);}
 .card-rank{position:absolute;top:1rem;right:1rem;font-family:'Space Mono',monospace;font-size:2rem;font-weight:700;color:var(--border);line-height:1;transition:color .2s;pointer-events:none;}
 .card:hover .card-rank{color:var(--accent);}
 .card-rank.top3{color:var(--accent);opacity:.5;}
 .card-img{width:100%;aspect-ratio:1;object-fit:contain;background:#0f0f18;border-radius:2px;padding:.5rem;max-height:160px;}
-.card-title{font-size:.85rem;font-weight:700;line-height:1.4;color:var(--text);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.card-title{font-size:.85rem;font-weight:700;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .card-meta{display:flex;flex-direction:column;gap:.5rem;margin-top:auto;}
 .card-price{font-size:1.3rem;font-weight:800;color:var(--accent);letter-spacing:-.02em;}
-.card-price .currency{font-size:.75rem;font-weight:400;opacity:.7;margin-right:2px;}
+.card-price .cur{font-size:.75rem;font-weight:400;opacity:.7;margin-right:2px;}
 .card-stats{display:flex;gap:.8rem;flex-wrap:wrap;}
-.stat-badge{font-family:'Space Mono',monospace;font-size:.62rem;padding:.25rem .5rem;border-radius:2px;display:flex;align-items:center;gap:.3rem;letter-spacing:.03em;}
-.stat-stars{background:rgba(255,228,77,.12);color:var(--accent);border:1px solid rgba(255,228,77,.25);}
-.stat-sales{background:rgba(79,255,176,.08);color:var(--green);border:1px solid rgba(79,255,176,.2);}
-.stat-reviews{background:rgba(255,107,53,.08);color:var(--accent2);border:1px solid rgba(255,107,53,.2);}
-.card-score-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
-.card-score-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:2px;}
-.score-label{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--muted);display:flex;justify-content:space-between;}
-.free-ship{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--green);letter-spacing:.05em;}
+.badge{font-family:'Space Mono',monospace;font-size:.62rem;padding:.25rem .5rem;border-radius:2px;display:flex;align-items:center;gap:.3rem;}
+.b-star{background:rgba(255,228,77,.12);color:var(--accent);border:1px solid rgba(255,228,77,.25);}
+.b-rev{background:rgba(255,107,53,.08);color:var(--accent2);border:1px solid rgba(255,107,53,.2);}
+.b-sold{background:rgba(79,255,176,.08);color:var(--green);border:1px solid rgba(79,255,176,.2);}
+.score-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
+.score-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:2px;}
+.score-lbl{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--muted);display:flex;justify-content:space-between;}
+.free-ship{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--green);}
 .card-actions{display:flex;gap:.5rem;}
-.btn-script{flex:1;text-align:center;padding:.55rem .5rem;background:var(--accent);color:var(--bg);font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;border:none;cursor:pointer;border-radius:2px;font-weight:700;transition:all .2s;}
+.btn-script{flex:1;padding:.55rem .5rem;background:var(--accent);color:var(--bg);font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;border:none;cursor:pointer;border-radius:2px;font-weight:700;transition:background .2s;}
 .btn-script:hover{background:#ffd000;}
 .btn-ml{padding:.55rem .7rem;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'Space Mono',monospace;font-size:.65rem;cursor:pointer;border-radius:2px;transition:all .2s;text-decoration:none;display:flex;align-items:center;}
 .btn-ml:hover{border-color:var(--accent);color:var(--accent);}
 footer{position:fixed;bottom:0;left:0;right:0;padding:.7rem 2rem;background:rgba(10,10,15,.95);border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;z-index:10;backdrop-filter:blur(10px);}
 footer p{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted);}
-#refresh-btn{font-family:'Space Mono',monospace;font-size:.65rem;padding:.4rem 1rem;background:transparent;border:1px solid var(--accent);color:var(--accent);cursor:pointer;border-radius:2px;letter-spacing:.08em;transition:all .2s;}
+#refresh-btn{font-family:'Space Mono',monospace;font-size:.65rem;padding:.4rem 1rem;background:transparent;border:1px solid var(--accent);color:var(--accent);cursor:pointer;border-radius:2px;transition:all .2s;}
 #refresh-btn:hover{background:var(--accent);color:var(--bg);}
-
 /* MODAL */
 #modal-overlay{display:none;position:fixed;inset:0;z-index:100;background:rgba(5,5,10,.92);backdrop-filter:blur(12px);}
 #modal-overlay.visible{display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto;animation:fadeIn .25s ease;}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 #modal{background:#0d0d18;border:1px solid var(--border);width:100%;max-width:860px;border-radius:4px;overflow:hidden;animation:slideUp .3s cubic-bezier(.16,1,.3,1);position:relative;margin-bottom:2rem;}
 @keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-.modal-header{padding:1.5rem 3rem 1.2rem 1.8rem;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:1.2rem;}
-.modal-product-img{width:80px;height:80px;object-fit:contain;background:#0f0f18;border-radius:3px;padding:.4rem;flex-shrink:0;}
-.modal-product-info{flex:1;}
-.modal-product-title{font-size:1rem;font-weight:700;line-height:1.4;margin-bottom:.4rem;}
-.modal-product-price{font-size:1.4rem;font-weight:800;color:var(--accent);}
+.modal-header{padding:1.5rem 3rem 1.2rem 1.8rem;border-bottom:1px solid var(--border);display:flex;gap:1.2rem;}
+.modal-pimg{width:80px;height:80px;object-fit:contain;background:#0f0f18;border-radius:3px;padding:.4rem;flex-shrink:0;}
+.modal-ptitle{font-size:1rem;font-weight:700;line-height:1.4;margin-bottom:.4rem;}
+.modal-pprice{font-size:1.4rem;font-weight:800;color:var(--accent);}
 .modal-close{position:absolute;top:1rem;right:1rem;background:transparent;border:1px solid var(--border);color:var(--muted);width:32px;height:32px;border-radius:2px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .2s;}
 .modal-close:hover{border-color:var(--accent2);color:var(--accent2);}
 .modal-tabs{display:flex;border-bottom:1px solid var(--border);background:var(--surface);}
@@ -88,48 +84,38 @@ footer p{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted);
 .modal-body{padding:1.8rem;}
 .tab-panel{display:none;}
 .tab-panel.active{display:block;}
-.format-selector{display:flex;gap:.6rem;margin-bottom:1.5rem;flex-wrap:wrap;align-items:center;}
-.format-label{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;}
-.format-btn{font-family:'Space Mono',monospace;font-size:.65rem;padding:.4rem .9rem;border:1px solid var(--border);background:transparent;color:var(--muted);border-radius:2px;cursor:pointer;transition:all .2s;}
-.format-btn:hover{border-color:var(--accent);color:var(--accent);}
-.format-btn.active{background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:700;}
-#script-loading,#images-loading{display:none;text-align:center;padding:3rem;}
-#script-loading .loader-bar,#images-loading .loader-bar{margin:0 auto 1rem;}
-#script-loading p,#images-loading p{font-family:'Space Mono',monospace;font-size:.75rem;color:var(--muted);}
+.fmt-row{display:flex;gap:.6rem;margin-bottom:1.5rem;flex-wrap:wrap;align-items:center;}
+.fmt-lbl{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;}
+.fmt-btn{font-family:'Space Mono',monospace;font-size:.65rem;padding:.4rem .9rem;border:1px solid var(--border);background:transparent;color:var(--muted);border-radius:2px;cursor:pointer;transition:all .2s;}
+.fmt-btn:hover{border-color:var(--accent);color:var(--accent);}
+.fmt-btn.active{background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:700;}
+.mini-loader{display:none;text-align:center;padding:3rem;}
+.mini-loader .loader-bar{margin:0 auto 1rem;}
+.mini-loader p{font-family:'Space Mono',monospace;font-size:.75rem;color:var(--muted);}
 #script-content{display:none;}
-.script-section{margin-bottom:1.2rem;border:1px solid var(--border);border-radius:3px;overflow:hidden;}
-.script-section-header{padding:.6rem 1rem;background:var(--surface);display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);}
-.script-section-title{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--accent);text-transform:uppercase;letter-spacing:.1em;}
-.script-section-body{padding:1rem;font-size:.9rem;line-height:1.7;color:var(--text);}
-.script-section-body.hook{font-size:1.1rem;font-weight:700;color:var(--accent);}
+.ss{margin-bottom:1.2rem;border:1px solid var(--border);border-radius:3px;overflow:hidden;}
+.ss-head{padding:.6rem 1rem;background:var(--surface);display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);}
+.ss-title{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--accent);text-transform:uppercase;letter-spacing:.1em;}
+.ss-body{padding:1rem;font-size:.9rem;line-height:1.7;}
+.ss-body.hook{font-size:1.1rem;font-weight:700;color:var(--accent);}
 .copy-btn{font-family:'Space Mono',monospace;font-size:.6rem;padding:.25rem .6rem;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;border-radius:2px;transition:all .2s;}
-.copy-btn:hover,.copy-btn.copied{border-color:var(--green);color:var(--green);}
-.copy-all-btn{width:100%;padding:.75rem;font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;background:transparent;border:1px solid var(--accent);color:var(--accent);cursor:pointer;border-radius:2px;letter-spacing:.1em;text-transform:uppercase;transition:all .2s;margin-top:1rem;}
-.copy-all-btn:hover{background:var(--accent);color:var(--bg);}
-.hashtag-row{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.5rem;}
-.hashtag{font-family:'Space Mono',monospace;font-size:.65rem;padding:.25rem .6rem;background:rgba(255,228,77,.08);border:1px solid rgba(255,228,77,.2);color:var(--accent);border-radius:2px;cursor:pointer;transition:all .2s;}
-.hashtag:hover{background:rgba(255,228,77,.2);}
-#images-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);}
+.copy-btn:hover,.copy-btn.ok{border-color:var(--green);color:var(--green);}
+.copy-all{width:100%;padding:.75rem;font-family:'Space Mono',monospace;font-size:.7rem;font-weight:700;background:transparent;border:1px solid var(--accent);color:var(--accent);cursor:pointer;border-radius:2px;letter-spacing:.1em;text-transform:uppercase;transition:all .2s;margin-top:1rem;}
+.copy-all:hover{background:var(--accent);color:var(--bg);}
+.htag-row{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.5rem;}
+.htag{font-family:'Space Mono',monospace;font-size:.65rem;padding:.25rem .6rem;background:rgba(255,228,77,.08);border:1px solid rgba(255,228,77,.2);color:var(--accent);border-radius:2px;cursor:pointer;transition:background .2s;}
+.htag:hover{background:rgba(255,228,77,.2);}
+#img-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);}
 .img-item{position:relative;aspect-ratio:1;overflow:hidden;cursor:pointer;background:#0f0f18;}
 .img-item img{width:100%;height:100%;object-fit:cover;transition:transform .3s;}
 .img-item:hover img{transform:scale(1.05);}
-.img-overlay{position:absolute;inset:0;background:rgba(0,0,0,.6);opacity:0;transition:opacity .2s;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:.65rem;color:white;text-transform:uppercase;letter-spacing:.1em;}
-.img-item:hover .img-overlay{opacity:1;}
+.img-ov{position:absolute;inset:0;background:rgba(0,0,0,.6);opacity:0;transition:opacity .2s;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:.65rem;color:#fff;text-transform:uppercase;letter-spacing:.1em;}
+.img-item:hover .img-ov{opacity:1;}
 .img-tip{margin-top:1rem;padding:.8rem 1rem;background:rgba(79,255,176,.06);border:1px solid rgba(79,255,176,.2);border-radius:2px;font-family:'Space Mono',monospace;font-size:.7rem;color:var(--green);line-height:1.6;}
-@media(max-width:600px){
-  header,footer{padding:1rem 1.2rem;}
-  .filters{padding:1rem 1.2rem;}
-  .main{padding:1rem 1.2rem 5rem;}
-  #grid{grid-template-columns:1fr 1fr;}
-  #modal-overlay{padding:.5rem;}
-  .modal-body{padding:1rem;}
-  .modal-header{padding:1rem 3rem 1rem 1rem;}
-  #images-grid{grid-template-columns:repeat(2,1fr);}
-}
+@media(max-width:600px){header,footer{padding:1rem 1.2rem;}.filters{padding:1rem 1.2rem;}.main{padding:1rem 1.2rem 5rem;}#grid{grid-template-columns:1fr 1fr;}#modal-overlay{padding:.5rem;}.modal-body{padding:1rem;}#img-grid{grid-template-columns:repeat(2,1fr);}}
 </style>
 </head>
 <body>
-
 <header>
   <div class="logo">
     <span class="logo-tag">↑ Powered by MercadoLibre API</span>
@@ -140,7 +126,6 @@ footer p{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted);
     <div style="font-family:'Space Mono',monospace;font-size:.6rem;color:var(--muted);margin-top:4px">Top 10 precio/calidad del día</div>
   </div>
 </header>
-
 <div class="filters">
   <label>País:</label>
   <button class="filter-btn active" data-site="MLA">🇦🇷 Argentina</button>
@@ -155,7 +140,6 @@ footer p{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted);
     <option value="rating">↓ Mejor rating</option>
   </select>
 </div>
-
 <div class="main">
   <div class="ranking-header">
     <h2>🏆 Ranking diario — gadgets & tecnología</h2>
@@ -163,18 +147,17 @@ footer p{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted);
   </div>
   <div id="loader">
     <div class="loader-bar"><div class="loader-fill"></div></div>
-    <p id="loader-msg">Conectando con Mercado Libre...</p>
+    <p id="loader-msg">Obteniendo token de acceso...</p>
   </div>
   <div id="error-msg">
-    <p>No se pudo obtener datos de Mercado Libre.<br>Revisá tu conexión a internet e intentá de nuevo.</p>
-    <button onclick="loadGadgets()">↺ Reintentar</button>
+    <p id="err-text">Error conectando con Mercado Libre.</p>
+    <button onclick="init()">↺ Reintentar</button>
   </div>
   <div id="grid"></div>
 </div>
-
 <footer>
   <p id="last-update">Última actualización: —</p>
-  <button id="refresh-btn" onclick="loadGadgets()">↺ Actualizar ranking</button>
+  <button id="refresh-btn" onclick="init()">↺ Actualizar ranking</button>
 </footer>
 
 <!-- MODAL -->
@@ -182,11 +165,11 @@ footer p{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted);
   <div id="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
     <div class="modal-header">
-      <img id="modal-img" class="modal-product-img" src="" alt="">
-      <div class="modal-product-info">
-        <div id="modal-title" class="modal-product-title"></div>
-        <div id="modal-price" class="modal-product-price"></div>
-        <div id="modal-stats" style="margin-top:.5rem;display:flex;gap:.5rem;flex-wrap:wrap;"></div>
+      <img id="m-img" class="modal-pimg" src="" alt="">
+      <div style="flex:1">
+        <div id="m-title" class="modal-ptitle"></div>
+        <div id="m-price" class="modal-pprice"></div>
+        <div id="m-stats" style="margin-top:.5rem;display:flex;gap:.5rem;flex-wrap:wrap"></div>
       </div>
     </div>
     <div class="modal-tabs">
@@ -195,83 +178,137 @@ footer p{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted);
     </div>
     <div class="modal-body">
       <div id="tab-script" class="tab-panel active">
-        <div class="format-selector">
-          <span class="format-label">Formato:</span>
-          <button class="format-btn active" data-format="tiktok">🎵 TikTok</button>
-          <button class="format-btn" data-format="reels">📸 Reels</button>
-          <button class="format-btn" data-format="shorts">▶ Shorts</button>
+        <div class="fmt-row">
+          <span class="fmt-lbl">Formato:</span>
+          <button class="fmt-btn active" data-format="tiktok">🎵 TikTok</button>
+          <button class="fmt-btn" data-format="reels">📸 Reels</button>
+          <button class="fmt-btn" data-format="shorts">▶ Shorts</button>
         </div>
-        <div id="script-loading"><div class="loader-bar"><div class="loader-fill"></div></div><p>Claude está escribiendo tu guión...</p></div>
+        <div class="mini-loader" id="script-loader"><div class="loader-bar"><div class="loader-fill"></div></div><p>Claude escribiendo tu guión...</p></div>
         <div id="script-content"></div>
       </div>
       <div id="tab-images" class="tab-panel">
-        <div id="images-loading"><div class="loader-bar"><div class="loader-fill"></div></div><p>Buscando imágenes...</p></div>
-        <div id="images-grid"></div>
-        <div id="img-tip" class="img-tip" style="display:none">
-          💡 <strong>Tip:</strong> Clic en cada imagen para verla en tamaño completo. Usá 3-5 imágenes por video: 1 llamativa de apertura, 2-3 mostrando el producto en uso, 1 con el precio.
-        </div>
+        <div class="mini-loader" id="img-loader"><div class="loader-bar"><div class="loader-fill"></div></div><p>Buscando imágenes...</p></div>
+        <div id="img-grid"></div>
+        <div id="img-tip" class="img-tip" style="display:none">💡 <strong>Tip:</strong> Clic en cada imagen para verla en full. Usá 3-5 por video: 1 impacto apertura, 2-3 en uso, 1 con precio.</div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-// ── CORS PROXY ──────────────────────────────────────────
-// Usamos allorigins.win para evitar el bloqueo CORS del browser
-function proxied(url) {
-  return `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+// ── CREDENCIALES ML ───────────────────────────────────────
+const ML_CLIENT_ID     = '705868301434397';
+const ML_CLIENT_SECRET = '6ppjJQGpqfJbkvEly36GCTxGFq8VG2DA';
+
+// Token cache
+let mlToken     = null;
+let tokenExpiry = 0;
+
+// Obtener token via Client Credentials + proxy CORS
+async function getToken() {
+  if (mlToken && Date.now() < tokenExpiry) return mlToken;
+
+  setMsg('Obteniendo token de acceso...');
+
+  const body = new URLSearchParams({
+    grant_type:    'client_credentials',
+    client_id:     ML_CLIENT_ID,
+    client_secret: ML_CLIENT_SECRET,
+  });
+
+  // Intentamos dos proxies por si uno falla
+  const proxies = [
+    (url, opts) => fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`, opts),
+    (url, opts) => fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`, opts),
+  ];
+
+  let lastErr;
+  for (const proxy of proxies) {
+    try {
+      const res = await proxy('https://api.mercadolibre.com/oauth/token', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body:    body.toString(),
+      });
+      const data = await res.json();
+      if (!data.access_token) throw new Error(JSON.stringify(data));
+      mlToken     = data.access_token;
+      tokenExpiry = Date.now() + (data.expires_in - 60) * 1000;
+      return mlToken;
+    } catch (e) { lastErr = e; }
+  }
+  throw new Error('No se pudo obtener el token: ' + lastErr?.message);
 }
 
-async function mlFetch(url) {
-  // Intentamos primero directo (funciona cuando el sitio está alojado en servidor)
+// Fetch ML con token + proxy CORS
+async function mlFetch(path) {
+  const token = await getToken();
+  const url   = `https://api.mercadolibre.com${path}`;
+
+  // Intento directo primero
   try {
-    const r = await fetch(url, { signal: AbortSignal.timeout(5000) });
+    const r = await fetch(url, {
+      headers: { Authorization: `Bearer ${token}` },
+      signal:  AbortSignal.timeout(5000),
+    });
     if (r.ok) return r.json();
-  } catch(e) { /* fall through to proxy */ }
+  } catch(e) {}
 
-  // Si falla por CORS, usamos el proxy
-  const r = await fetch(proxied(url), { signal: AbortSignal.timeout(12000) });
-  if (!r.ok) throw new Error('proxy error');
-  const wrapper = await r.json();
-  return JSON.parse(wrapper.contents);
+  // Proxy fallback — allorigins no pasa headers custom bien, usamos corsproxy.io
+  const r = await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`, {
+    headers: { Authorization: `Bearer ${token}` },
+    signal:  AbortSignal.timeout(12000),
+  });
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return r.json();
 }
 
-// ── ESTADO ───────────────────────────────────────────────
-const QUERIES = ['gadget tecnologia','smartwatch','auriculares bluetooth','powerbank','parlante bluetooth','camara accion','teclado gamer'];
+// ── ESTADO ────────────────────────────────────────────────
+const QUERIES = [
+  'smartwatch','auriculares bluetooth','powerbank',
+  'parlante bluetooth','camara deportiva','teclado gamer',
+  'lampara led escritorio','mouse inalambrico'
+];
 let currentSite = 'MLA';
-let allProducts  = [];
-let currentSort  = 'score';
+let allProducts = [];
+let currentSort = 'score';
 let currentProduct = null;
 let currentFormat  = 'tiktok';
 const scriptCache  = {};
 const imagesCache  = {};
 
-// ── FECHA ────────────────────────────────────────────────
 document.getElementById('live-date').textContent =
   new Date().toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 
 // ── HELPERS ───────────────────────────────────────────────
-function fmtPrice(price, cur) {
+function fmtP(price, cur) {
   const sym = {ARS:'$',MXN:'$',CLP:'$',UYU:'$',BRL:'R$',USD:'U$S'}[cur]||'$';
   return {sym, val: Math.round(price).toLocaleString('es-AR')};
 }
-function calcScore(p) {
+function score(p) {
   return Math.round(
     ((p.rating-4.5)/0.5)*40 +
     Math.min(p.reviews/500,1)*30 +
     Math.min(p.sold/1000,1)*30
   );
 }
+function setMsg(txt) { document.getElementById('loader-msg').textContent = txt; }
+function showLoader(v) { document.getElementById('loader').style.display = v?'flex':'none'; }
+function showError(txt) {
+  document.getElementById('error-msg').style.display = 'block';
+  document.getElementById('err-text').textContent = txt || 'Error conectando con Mercado Libre.';
+}
 
-// ── FETCH MERCADOLIBRE ────────────────────────────────────
+// ── FETCH PRODUCTOS ───────────────────────────────────────
 async function fetchProducts(site) {
-  document.getElementById('loader-msg').textContent = 'Consultando Mercado Libre...';
   const results = [];
-  for (const q of QUERIES.slice(0,5)) {
+  for (const q of QUERIES.slice(0,6)) {
     try {
-      document.getElementById('loader-msg').textContent = `Buscando: ${q}...`;
-      const url = `https://api.mercadolibre.com/sites/${site}/search?q=${encodeURIComponent(q)}&condition=new&sort=sold_quantity_desc&limit=12`;
-      const data = await mlFetch(url);
+      setMsg(`Buscando: ${q}...`);
+      const data = await mlFetch(
+        `/sites/${site}/search?q=${encodeURIComponent(q)}&condition=new&sort=sold_quantity_desc&limit=12`
+      );
       for (const item of (data.results||[])) {
         const rep = item.seller?.seller_reputation;
         results.push({
@@ -283,13 +320,13 @@ async function fetchProducts(site) {
           url:      item.permalink,
           rating:   rep?.transactions?.ratings?.positive
                       ? parseFloat((rep.transactions.ratings.positive*5).toFixed(1))
-                      : parseFloat((4.5+Math.random()*0.5).toFixed(1)),
+                      : parseFloat((4.5+Math.random()*.5).toFixed(1)),
           reviews:  rep?.transactions?.completed || Math.floor(Math.random()*300+60),
           sold:     item.sold_quantity||0,
           freeShip: item.shipping?.free_shipping||false,
         });
       }
-    } catch(e) { console.warn('query failed:', q, e); }
+    } catch(e) { console.warn(q, e); }
   }
   const seen = new Set();
   return results.filter(p=>{
@@ -299,46 +336,45 @@ async function fetchProducts(site) {
   });
 }
 
-// ── RENDER CARDS ──────────────────────────────────────────
-function sortProducts(arr, method) {
+// ── RENDER ────────────────────────────────────────────────
+function sortArr(arr, m) {
   const c=[...arr];
-  if(method==='price_asc') return c.sort((a,b)=>a.price-b.price);
-  if(method==='sales')     return c.sort((a,b)=>b.sold-a.sold);
-  if(method==='rating')    return c.sort((a,b)=>b.rating-a.rating);
-  return c.sort((a,b)=>calcScore(b)-calcScore(a));
+  if(m==='price_asc') return c.sort((a,b)=>a.price-b.price);
+  if(m==='sales')     return c.sort((a,b)=>b.sold-a.sold);
+  if(m==='rating')    return c.sort((a,b)=>b.rating-a.rating);
+  return c.sort((a,b)=>score(b)-score(a));
 }
 
 function renderCards(products) {
-  const grid=document.getElementById('grid');
-  const top=products.slice(0,10);
-  document.getElementById('result-count').textContent=`${top.length} productos`;
+  const grid = document.getElementById('grid');
+  const top  = products.slice(0,10);
+  document.getElementById('result-count').textContent = `${top.length} productos`;
   if(!top.length){
-    grid.innerHTML=`<div style="padding:3rem;color:var(--muted);font-family:'Space Mono',monospace;font-size:.8rem;grid-column:1/-1;text-align:center">Sin resultados para este país.</div>`;
+    grid.innerHTML=`<div style="padding:3rem;color:var(--muted);font-family:'Space Mono',monospace;font-size:.8rem;grid-column:1/-1;text-align:center">Sin resultados. Intentá con otro país.</div>`;
     return;
   }
-  grid.innerHTML=top.map((item,i)=>{
-    const rank=i+1;
-    const {sym,val}=fmtPrice(item.price,item.currency);
-    const score=Math.min(calcScore(item),100);
+  const NO_IMG = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect fill='%2312121a' width='100' height='100'/%3E%3Ctext x='50' y='58' text-anchor='middle' fill='%232a2a3d' font-size='32'%3E%F0%9F%93%A6%3C/text%3E%3C/svg%3E`;
+  grid.innerHTML = top.map((item,i)=>{
+    const rank=i+1, {sym,val}=fmtP(item.price,item.currency);
+    const sc=Math.min(score(item),100);
     const trophy=rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'';
     const enc=encodeURIComponent(JSON.stringify(item));
     return `
     <div class="card">
       <span class="card-rank ${rank<=3?'top3':''}">${trophy||'#'+rank}</span>
-      <img class="card-img" src="${item.image}" alt="" loading="lazy"
-        onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%2312121a%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%22 y=%2258%22 text-anchor=%22middle%22 fill=%22%232a2a3d%22 font-size=%2232%22%3E📦%3C/text%3E%3C/svg%3E'">
+      <img class="card-img" src="${item.image}" loading="lazy" onerror="this.src='${NO_IMG}'" alt="">
       <div class="card-title">${item.title}</div>
       <div class="card-meta">
-        <div class="card-price"><span class="currency">${sym}</span>${val}</div>
+        <div class="card-price"><span class="cur">${sym}</span>${val}</div>
         <div class="card-stats">
-          <span class="stat-badge stat-stars">★ ${item.rating.toFixed(1)}</span>
-          <span class="stat-badge stat-reviews">💬 ${item.reviews.toLocaleString()}</span>
-          ${item.sold>0?`<span class="stat-badge stat-sales">↑ ${item.sold.toLocaleString()}</span>`:''}
+          <span class="badge b-star">★ ${item.rating.toFixed(1)}</span>
+          <span class="badge b-rev">💬 ${item.reviews.toLocaleString()}</span>
+          ${item.sold>0?`<span class="badge b-sold">↑ ${item.sold.toLocaleString()}</span>`:''}
         </div>
         ${item.freeShip?`<span class="free-ship">✓ Envío gratis</span>`:''}
         <div>
-          <div class="score-label"><span>Score P/C/R</span><span>${score}/100</span></div>
-          <div class="card-score-bar"><div class="card-score-fill" style="width:${score}%"></div></div>
+          <div class="score-lbl"><span>Score P/C/R</span><span>${sc}/100</span></div>
+          <div class="score-bar"><div class="score-fill" style="width:${sc}%"></div></div>
         </div>
         <div class="card-actions">
           <button class="btn-script" onclick="openModal('${enc}')">🎬 Generar guión</button>
@@ -349,20 +385,21 @@ function renderCards(products) {
   }).join('');
 }
 
-async function loadGadgets() {
+// ── INIT ──────────────────────────────────────────────────
+async function init() {
   document.getElementById('grid').innerHTML='';
   document.getElementById('error-msg').style.display='none';
-  document.getElementById('loader').style.display='flex';
+  showLoader(true);
   try {
     allProducts = await fetchProducts(currentSite);
-    document.getElementById('loader').style.display='none';
-    if(!allProducts.length){ document.getElementById('error-msg').style.display='block'; return; }
-    renderCards(sortProducts(allProducts,currentSort));
+    showLoader(false);
+    if(!allProducts.length){ showError('No se encontraron productos. Intentá de nuevo.'); return; }
+    renderCards(sortArr(allProducts,currentSort));
     document.getElementById('last-update').textContent=`Última actualización: ${new Date().toLocaleTimeString('es-AR')}`;
   } catch(e) {
+    showLoader(false);
+    showError(`Error: ${e.message}`);
     console.error(e);
-    document.getElementById('loader').style.display='none';
-    document.getElementById('error-msg').style.display='block';
   }
 }
 
@@ -370,19 +407,19 @@ async function loadGadgets() {
 function openModal(enc) {
   const item=JSON.parse(decodeURIComponent(enc));
   currentProduct=item;
-  const {sym,val}=fmtPrice(item.price,item.currency);
-  document.getElementById('modal-img').src=item.image;
-  document.getElementById('modal-title').textContent=item.title;
-  document.getElementById('modal-price').textContent=`${sym}${val}`;
-  document.getElementById('modal-stats').innerHTML=`
-    <span class="stat-badge stat-stars">★ ${item.rating.toFixed(1)}</span>
-    <span class="stat-badge stat-reviews">💬 ${item.reviews.toLocaleString()}</span>
-    ${item.sold>0?`<span class="stat-badge stat-sales">↑ ${item.sold.toLocaleString()} vendidos</span>`:''}
-    ${item.freeShip?`<span class="stat-badge" style="background:rgba(79,255,176,.08);color:var(--green);border:1px solid rgba(79,255,176,.2)">✓ Envío gratis</span>`:''}
+  const {sym,val}=fmtP(item.price,item.currency);
+  document.getElementById('m-img').src=item.image;
+  document.getElementById('m-title').textContent=item.title;
+  document.getElementById('m-price').textContent=`${sym}${val}`;
+  document.getElementById('m-stats').innerHTML=`
+    <span class="badge b-star">★ ${item.rating.toFixed(1)}</span>
+    <span class="badge b-rev">💬 ${item.reviews.toLocaleString()}</span>
+    ${item.sold>0?`<span class="badge b-sold">↑ ${item.sold.toLocaleString()} vendidos</span>`:''}
+    ${item.freeShip?`<span class="badge" style="background:rgba(79,255,176,.08);color:var(--green);border:1px solid rgba(79,255,176,.2)">✓ Envío gratis</span>`:''}
   `;
   switchTab('script');
   document.getElementById('script-content').style.display='none';
-  document.getElementById('images-grid').innerHTML='';
+  document.getElementById('img-grid').innerHTML='';
   document.getElementById('img-tip').style.display='none';
   document.getElementById('modal-overlay').classList.add('visible');
   document.body.style.overflow='hidden';
@@ -392,172 +429,131 @@ function closeModal(){
   document.getElementById('modal-overlay').classList.remove('visible');
   document.body.style.overflow='';
 }
-document.getElementById('modal-overlay').addEventListener('click',e=>{ if(e.target===document.getElementById('modal-overlay')) closeModal(); });
-document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+document.getElementById('modal-overlay').addEventListener('click',e=>{if(e.target===document.getElementById('modal-overlay'))closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 
-function switchTab(tab) {
+function switchTab(tab){
   document.querySelectorAll('.modal-tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===tab));
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active',p.id==='tab-'+tab));
   if(tab==='images'&&currentProduct&&!imagesCache[currentProduct.id]) loadImages();
 }
 document.querySelectorAll('.modal-tab').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
-document.querySelectorAll('.format-btn').forEach(b=>b.addEventListener('click',()=>{
-  document.querySelectorAll('.format-btn').forEach(x=>x.classList.remove('active'));
-  b.classList.add('active');
-  currentFormat=b.dataset.format;
+document.querySelectorAll('.fmt-btn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.fmt-btn').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active'); currentFormat=b.dataset.format;
   if(currentProduct) generateScript();
 }));
 
 // ── CLAUDE: GUIÓN ─────────────────────────────────────────
-async function generateScript() {
+async function generateScript(){
   if(!currentProduct) return;
   const key=`${currentProduct.id}_${currentFormat}`;
   document.getElementById('script-content').style.display='none';
-  document.getElementById('script-loading').style.display='block';
-  if(scriptCache[key]){ renderScript(scriptCache[key]); return; }
-
+  document.getElementById('script-loader').style.display='block';
+  if(scriptCache[key]){renderScript(scriptCache[key]);return;}
   const fmts={
-    tiktok:{dur:'30-45 seg',style:'energético, directo, gancho viral en 3 segundos, lenguaje informal',cta:'seguime para más gadgets 🔥'},
-    reels: {dur:'30-60 seg',style:'visual y aspiracional, tono amigable, sugerí texto en pantalla',cta:'guardá este post 💾'},
-    shorts:{dur:'45-60 seg',style:'informativo pero entretenido, estructura clara, recomendá subtítulos',cta:'suscribite para el top semanal 🔔'}
+    tiktok:{dur:'30-45 seg',style:'energético, directo, gancho viral en 3 seg, lenguaje informal gen-z',cta:'seguime para más gadgets 🔥'},
+    reels: {dur:'30-60 seg',style:'visual y aspiracional, tono amigable, sugerí texto overlay',cta:'guardá este post 💾'},
+    shorts:{dur:'45-60 seg',style:'informativo pero entretenido, estructura clara, subtítulos recomendados',cta:'suscribite para el top semanal 🔔'}
   };
   const f=fmts[currentFormat];
-  const {sym,val}=fmtPrice(currentProduct.price,currentProduct.currency);
-
-  try {
+  const {sym,val}=fmtP(currentProduct.price,currentProduct.currency);
+  try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        messages:[{role:'user',content:`Sos experto en marketing de contenidos para redes sociales latinoamericanas.
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:
+        `Sos experto en marketing de contenidos para redes sociales latinoamericanas.
 Generá un guión para un video ${f.dur} sobre este gadget para ${currentFormat.toUpperCase()}.
-
 PRODUCTO: ${currentProduct.title}
 PRECIO: ${sym}${val}
-RATING: ${currentProduct.rating}/5 ⭐  |  VENTAS: ${currentProduct.sold}
-
+RATING: ${currentProduct.rating}/5  VENTAS: ${currentProduct.sold}
 ESTILO: ${f.style}
-
 Respondé ÚNICAMENTE con JSON válido sin markdown:
-{"hook":"frase apertura impactante máx 12 palabras","que_es":"descripción 2-3 oraciones atractivas","utilidades":["utilidad 1","utilidad 2","utilidad 3"],"caracteristicas":["característica 1","característica 2","característica 3"],"precio_argumento":"1-2 oraciones por qué vale la pena","cta":"call to action con emoji","hashtags":["#h1","#h2","#h3","#h4","#h5","#h6","#h7"],"texto_pantalla":["slide apertura","slide beneficio","slide precio/cta"]}`}]
-      })
+{"hook":"frase apertura máx 12 palabras","que_es":"descripción 2-3 oraciones","utilidades":["u1","u2","u3"],"caracteristicas":["c1","c2","c3"],"precio_argumento":"1-2 oraciones","cta":"cta con emoji","hashtags":["#h1","#h2","#h3","#h4","#h5","#h6","#h7"],"texto_pantalla":["slide 1","slide 2","slide 3"]}`
+      }]})
     });
-    const data=await res.json();
-    const raw=(data.content||[]).map(c=>c.text||'').join('').replace(/```json|```/g,'').trim();
+    const d=await res.json();
+    const raw=(d.content||[]).map(c=>c.text||'').join('').replace(/```json|```/g,'').trim();
     const parsed=JSON.parse(raw);
-    scriptCache[key]=parsed;
-    renderScript(parsed);
-  } catch(e) {
-    document.getElementById('script-loading').style.display='none';
+    scriptCache[key]=parsed; renderScript(parsed);
+  }catch(e){
+    document.getElementById('script-loader').style.display='none';
     document.getElementById('script-content').style.display='block';
-    document.getElementById('script-content').innerHTML=`<div style="color:var(--accent2);font-family:'Space Mono',monospace;font-size:.8rem;padding:2rem;text-align:center;border:1px solid var(--border);border-radius:3px;">Error generando guión.<br><br><button onclick="generateScript()" style="font-family:'Space Mono',monospace;padding:.5rem 1rem;background:var(--accent);color:var(--bg);border:none;cursor:pointer;border-radius:2px;font-weight:700;">↺ Reintentar</button></div>`;
+    document.getElementById('script-content').innerHTML=`<div style="color:var(--accent2);font-family:'Space Mono',monospace;font-size:.8rem;padding:2rem;text-align:center;border:1px solid var(--border);border-radius:3px">Error generando guión.<br><br><button onclick="generateScript()" style="font-family:'Space Mono',monospace;padding:.5rem 1rem;background:var(--accent);color:var(--bg);border:none;cursor:pointer;border-radius:2px;font-weight:700">↺ Reintentar</button></div>`;
   }
 }
 
-function renderScript(s) {
-  document.getElementById('script-loading').style.display='none';
-  const el=document.getElementById('script-content');
-  el.style.display='block';
+function renderScript(s){
+  document.getElementById('script-loader').style.display='none';
+  const el=document.getElementById('script-content'); el.style.display='block';
   const fl={tiktok:'TikTok 🎵',reels:'Instagram Reels 📸',shorts:'YouTube Shorts ▶'}[currentFormat];
-  const {sym,val}=fmtPrice(currentProduct.price,currentProduct.currency);
-  const full=`🎬 GUIÓN ${fl} — ${currentProduct.title}\n\n🔥 HOOK:\n${s.hook}\n\n📦 ¿QUÉ ES?:\n${s.que_es}\n\n✅ UTILIDADES:\n${s.utilidades.map((u,i)=>`${i+1}. ${u}`).join('\n')}\n\n⚡ CARACTERÍSTICAS:\n${s.caracteristicas.map((c,i)=>`${i+1}. ${c}`).join('\n')}\n\n💰 ARGUMENTO DE PRECIO:\n${s.precio_argumento}\n\n📢 CTA:\n${s.cta}\n\n📺 TEXTOS EN PANTALLA:\n${s.texto_pantalla.map((t,i)=>`Slide ${i+1}: "${t}"`).join('\n')}\n\n#️⃣ HASHTAGS:\n${s.hashtags.join(' ')}`;
+  const {sym,val}=fmtP(currentProduct.price,currentProduct.currency);
+  const full=`🎬 GUIÓN ${fl} — ${currentProduct.title}\n\n🔥 HOOK:\n${s.hook}\n\n📦 ¿QUÉ ES?:\n${s.que_es}\n\n✅ UTILIDADES:\n${s.utilidades.map((u,i)=>`${i+1}. ${u}`).join('\n')}\n\n⚡ CARACTERÍSTICAS:\n${s.caracteristicas.map((c,i)=>`${i+1}. ${c}`).join('\n')}\n\n💰 PRECIO:\n${s.precio_argumento}\n\n📢 CTA:\n${s.cta}\n\n📺 PANTALLA:\n${s.texto_pantalla.map((t,i)=>`Slide ${i+1}: "${t}"`).join('\n')}\n\n#️⃣ HASHTAGS:\n${s.hashtags.join(' ')}`;
   el.innerHTML=`
-    <div class="script-section">
-      <div class="script-section-header"><span class="script-section-title">🔥 Hook / Apertura</span><button class="copy-btn" onclick="doCopy(this,${JSON.stringify(s.hook)})">Copiar</button></div>
-      <div class="script-section-body hook">"${s.hook}"</div>
-    </div>
-    <div class="script-section">
-      <div class="script-section-header"><span class="script-section-title">📦 ¿Qué es?</span><button class="copy-btn" onclick="doCopy(this,${JSON.stringify(s.que_es)})">Copiar</button></div>
-      <div class="script-section-body">${s.que_es}</div>
-    </div>
-    <div class="script-section">
-      <div class="script-section-header"><span class="script-section-title">✅ Utilidades</span></div>
-      <div class="script-section-body">${s.utilidades.map((u,i)=>`<div style="margin-bottom:.5rem;display:flex;gap:.6rem"><span style="color:var(--accent);font-weight:700;min-width:1.2rem">${i+1}.</span><span>${u}</span></div>`).join('')}</div>
-    </div>
-    <div class="script-section">
-      <div class="script-section-header"><span class="script-section-title">⚡ Características</span></div>
-      <div class="script-section-body">${s.caracteristicas.map((c,i)=>`<div style="margin-bottom:.5rem;display:flex;gap:.6rem"><span style="color:var(--green);font-weight:700;min-width:1.2rem">${i+1}.</span><span>${c}</span></div>`).join('')}</div>
-    </div>
-    <div class="script-section">
-      <div class="script-section-header"><span class="script-section-title">💰 Argumento de precio</span></div>
-      <div class="script-section-body">${s.precio_argumento}</div>
-    </div>
-    <div class="script-section">
-      <div class="script-section-header"><span class="script-section-title">📢 Call to Action</span><button class="copy-btn" onclick="doCopy(this,${JSON.stringify(s.cta)})">Copiar</button></div>
-      <div class="script-section-body" style="font-weight:700;color:var(--accent2);font-size:1rem">${s.cta}</div>
-    </div>
-    <div class="script-section">
-      <div class="script-section-header"><span class="script-section-title">📺 Textos en pantalla</span></div>
-      <div class="script-section-body">${s.texto_pantalla.map((t,i)=>`<div style="margin-bottom:.6rem;padding:.5rem .7rem;background:rgba(255,255,255,.03);border-left:2px solid var(--accent)"><div style="font-family:'Space Mono',monospace;font-size:.55rem;color:var(--muted);margin-bottom:.2rem">SLIDE ${i+1}</div><div style="font-weight:700">${t}</div></div>`).join('')}</div>
-    </div>
-    <div class="script-section">
-      <div class="script-section-header"><span class="script-section-title">#️⃣ Hashtags</span><button class="copy-btn" onclick="doCopy(this,${JSON.stringify(s.hashtags.join(' '))})">Copiar todos</button></div>
-      <div class="script-section-body"><div class="hashtag-row">${s.hashtags.map(h=>`<span class="hashtag" onclick="doCopy(this,'${h}')">${h}</span>`).join('')}</div><div style="font-family:'Space Mono',monospace;font-size:.6rem;color:var(--muted);margin-top:.5rem">Clic en cada # para copiarlo</div></div>
-    </div>
-    <button class="copy-all-btn" onclick="doCopy(this,${JSON.stringify(full)})">📋 Copiar guión completo — ${fl}</button>
-  `;
+    <div class="ss"><div class="ss-head"><span class="ss-title">🔥 Hook / Apertura</span><button class="copy-btn" onclick="doCopy(this,${JSON.stringify(s.hook)})">Copiar</button></div><div class="ss-body hook">"${s.hook}"</div></div>
+    <div class="ss"><div class="ss-head"><span class="ss-title">📦 ¿Qué es?</span><button class="copy-btn" onclick="doCopy(this,${JSON.stringify(s.que_es)})">Copiar</button></div><div class="ss-body">${s.que_es}</div></div>
+    <div class="ss"><div class="ss-head"><span class="ss-title">✅ Utilidades</span></div><div class="ss-body">${s.utilidades.map((u,i)=>`<div style="margin-bottom:.5rem;display:flex;gap:.6rem"><span style="color:var(--accent);font-weight:700;min-width:1.2rem">${i+1}.</span><span>${u}</span></div>`).join('')}</div></div>
+    <div class="ss"><div class="ss-head"><span class="ss-title">⚡ Características</span></div><div class="ss-body">${s.caracteristicas.map((c,i)=>`<div style="margin-bottom:.5rem;display:flex;gap:.6rem"><span style="color:var(--green);font-weight:700;min-width:1.2rem">${i+1}.</span><span>${c}</span></div>`).join('')}</div></div>
+    <div class="ss"><div class="ss-head"><span class="ss-title">💰 Argumento de precio</span></div><div class="ss-body">${s.precio_argumento}</div></div>
+    <div class="ss"><div class="ss-head"><span class="ss-title">📢 Call to Action</span><button class="copy-btn" onclick="doCopy(this,${JSON.stringify(s.cta)})">Copiar</button></div><div class="ss-body" style="font-weight:700;color:var(--accent2);font-size:1rem">${s.cta}</div></div>
+    <div class="ss"><div class="ss-head"><span class="ss-title">📺 Textos en pantalla</span></div><div class="ss-body">${s.texto_pantalla.map((t,i)=>`<div style="margin-bottom:.6rem;padding:.5rem .7rem;background:rgba(255,255,255,.03);border-left:2px solid var(--accent)"><div style="font-family:'Space Mono',monospace;font-size:.55rem;color:var(--muted);margin-bottom:.2rem">SLIDE ${i+1}</div><div style="font-weight:700">${t}</div></div>`).join('')}</div></div>
+    <div class="ss"><div class="ss-head"><span class="ss-title">#️⃣ Hashtags</span><button class="copy-btn" onclick="doCopy(this,${JSON.stringify(s.hashtags.join(' '))})">Copiar todos</button></div><div class="ss-body"><div class="htag-row">${s.hashtags.map(h=>`<span class="htag" onclick="doCopy(this,'${h}')">${h}</span>`).join('')}</div><div style="font-family:'Space Mono',monospace;font-size:.6rem;color:var(--muted);margin-top:.5rem">Clic en cada # para copiarlo</div></div></div>
+    <button class="copy-all" onclick="doCopy(this,${JSON.stringify(full)})">📋 Copiar guión completo — ${fl}</button>`;
 }
 
 // ── CLAUDE: IMÁGENES ──────────────────────────────────────
-async function loadImages() {
+async function loadImages(){
   if(!currentProduct) return;
   const id=currentProduct.id;
-  document.getElementById('images-loading').style.display='block';
-  document.getElementById('images-grid').innerHTML='';
+  document.getElementById('img-loader').style.display='block';
+  document.getElementById('img-grid').innerHTML='';
   document.getElementById('img-tip').style.display='none';
-  if(imagesCache[id]){ renderImages(imagesCache[id]); return; }
+  if(imagesCache[id]){renderImages(imagesCache[id]);return;}
   let queries;
-  try {
+  try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:250,
-        messages:[{role:'user',content:`For this product: "${currentProduct.title}", give me 6 short Unsplash search queries in English that would find lifestyle/in-use product images for a social video. Return ONLY a JSON array, no markdown: ["q1","q2","q3","q4","q5","q6"]`}]
-      })
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:250,messages:[{role:'user',content:
+        `For this product: "${currentProduct.title}", give me 6 short Unsplash search queries in English for lifestyle/in-use images for a social video. Return ONLY a JSON array, no markdown: ["q1","q2","q3","q4","q5","q6"]`}]})
     });
     const d=await res.json();
     queries=JSON.parse((d.content||[]).map(c=>c.text||'').join('').replace(/```json|```/g,'').trim());
-  } catch(e) {
+  }catch(e){
     const kw=currentProduct.title.split(' ').slice(0,2).join(' ');
-    queries=[kw,`${kw} lifestyle`,`${kw} hand`,`technology gadget desk`,'smart device minimal',`${kw} closeup`];
+    queries=[kw,`${kw} lifestyle`,`${kw} hands`,'technology gadget','smart device desk',`${kw} closeup`];
   }
   const imgs=queries.map((q,i)=>({url:`https://source.unsplash.com/600x600/?${encodeURIComponent(q)}&sig=${Date.now()+i}`,query:q}));
-  imagesCache[id]=imgs;
-  renderImages(imgs);
+  imagesCache[id]=imgs; renderImages(imgs);
 }
 
-function renderImages(imgs) {
-  document.getElementById('images-loading').style.display='none';
-  document.getElementById('images-grid').innerHTML=imgs.map(img=>`
+function renderImages(imgs){
+  document.getElementById('img-loader').style.display='none';
+  document.getElementById('img-grid').innerHTML=imgs.map(img=>`
     <div class="img-item" onclick="window.open('${img.url}','_blank')">
       <img src="${img.url}" alt="${img.query}" loading="lazy" onerror="this.parentElement.style.display='none'">
-      <div class="img-overlay">↗ Abrir</div>
+      <div class="img-ov">↗ Abrir</div>
     </div>`).join('');
   document.getElementById('img-tip').style.display='block';
 }
 
-// ── COPY ──────────────────────────────────────────────────
-async function doCopy(btn,text) {
-  try {
+// ── UTILS ─────────────────────────────────────────────────
+async function doCopy(btn,text){
+  try{
     await navigator.clipboard.writeText(text);
-    if(btn){const o=btn.textContent;btn.textContent='✓';btn.classList.add('copied');setTimeout(()=>{btn.textContent=o;btn.classList.remove('copied');},2000);}
-  } catch(e){}
+    if(btn){const o=btn.textContent;btn.textContent='✓';btn.classList.add('ok');setTimeout(()=>{btn.textContent=o;btn.classList.remove('ok');},2000);}
+  }catch(e){}
 }
 
 // ── EVENTS ────────────────────────────────────────────────
 document.querySelectorAll('.filter-btn[data-site]').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('.filter-btn[data-site]').forEach(x=>x.classList.remove('active'));
-  b.classList.add('active'); currentSite=b.dataset.site; loadGadgets();
+  b.classList.add('active'); currentSite=b.dataset.site; init();
 }));
 document.getElementById('sort-select').addEventListener('change',e=>{
-  currentSort=e.target.value; renderCards(sortProducts(allProducts,currentSort));
+  currentSort=e.target.value; renderCards(sortArr(allProducts,currentSort));
 });
 
-loadGadgets();
+init();
 </script>
 </body>
 </html>
